@@ -53,6 +53,7 @@ class GetNumbers(views.APIView):
                               )
                     phone_number.is_avaliable = False
                     phone_number.save()
+                    return Response({'Phone Number': phone_number.number})
                     # return Response({'message': 'No more numbers available'})
             except SMTPException:
                 return Response({'error': 'Email not sent Server Error'})
