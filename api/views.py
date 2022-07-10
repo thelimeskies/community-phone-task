@@ -42,7 +42,19 @@ class GetNumbers(views.APIView):
                     phone_number.save()
                     return Response({'Phone Number': phone_number.number})
                 else:
-                    return Response({'message': 'No more numbers available'})
+                    phone_number = PhoneNumbers.objects.filter(
+                        is_avaliable=True).first()
+                    send_mail('Phone Number',
+                              phone_number.number + 'Area Code: ' + area_code +
+                              'not available',
+                              'test@example.com',
+                              [email],
+                              fail_silently=False
+                              )
+                    phone_number.is_avaliable = False
+                    phone_number.save()
+                    return Response({'Phone Number': phone_number.number})
+                    # return Response({'message': 'No more numbers available'})
             except SMTPException:
                 return Response({'error': 'Email not sent Server Error'})
         else:
